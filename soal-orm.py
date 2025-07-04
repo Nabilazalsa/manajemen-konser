@@ -89,32 +89,51 @@ def delete_concert():
     except ValueError:
         print('Inputan Tidak Valid!')
 
+# --- FILTER BY LOCATION ---
+def filter_concert_by_location():
+    location = input("Masukkan lokasi konser yang ingin difilter: ")
+    results = session.query(Concerts).filter(Concerts.location.ilike(f"%{location}%")).all()
+
+    if results:
+        print("\nDaftar Konser di Lokasi Tersebut:")
+        for concert in results:
+            print(f"{concert.id}. {concert.name} - {concert.location}")
+    else:
+        print("Tidak ditemukan konser di lokasi tersebut.")
+    print()
+
+
 # --- MENU ---
 def menu():
     while True:
         print("=== MENU MANAJEMEN KONSER ===")
         print("1. Tambah Konser")
         print("2. Lihat Semua Konser")
-        print("3. Cari Konser ")  # ← Tambahkan opsi ini
+        print("3. Cari Konser")
         print("4. Update Konser")
         print("5. Hapus Konser")
-        print("6. Keluar")
-        pilihan = input("Pilih menu (1-6): ")
+        print("6. Filter Konser Berdasarkan Lokasi")  # ← Tambah opsi filter
+        print("7. Keluar")
+
+        pilihan = input("Pilih menu (1-7): ")
 
         if pilihan == '1':
             add_concert()
         elif pilihan == '2':
             list_concerts()
         elif pilihan == '3':
-            search_concert()  # ← Fungsi pencarian dipanggil di sini
+            search_concert()
         elif pilihan == '4':
             update_concert()
         elif pilihan == '5':
             delete_concert()
         elif pilihan == '6':
+            filter_concert_by_location()   # ← Tambah pemanggilan fungsi filter
+        elif pilihan == '7':
             break
         else:
             print('Menu Tidak Ditemukan')
+
 
 if __name__ == '__main__':
     menu()
